@@ -1,24 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useEffect } from 'react'
+import Login from "./login/Login";
+import Signin from "./signin/Signin";
+import Home from "./main/Home";
+
+
+
+// import {useLo} from 'react-dom';
+
+import { BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
+import { useState } from "react";
+import Navbar from "./components/Navbar";
+import NewCourse from "./components/NewCourse";
+import OnlineTest from "./components/OnlineTest"
+import {allCourses} from "./components/data/courseData"
+// import Logout from "./logout/Logout";
 
 function App() {
+  const [auth,setAuth]=useState(false)  
+  const [courses, setCourses] = useState(allCourses);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App"> 
+      <Navbar auth={auth} setAuth={setAuth}/>
+        <Routes>
+          <Route path="/" element={ auth ? <Home  courses={courses}/> : <Navigate replace to="/login" />} />
+          <Route path="/login" element={<Login setAuth={setAuth}/>} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/new-course" element={<NewCourse courses={courses} setCourses={setCourses}/>} />
+          <Route path="/online-test" element={<OnlineTest/>} />
+          {/* <Route path="/login" element={<Logout/>} /> */}
+
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
